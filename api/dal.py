@@ -4,7 +4,7 @@ from students_part_2.DigitalHunter_map import plot_map_with_geometry
 conn = connect_to_db()
 #1
 def get_quality_goal_shift_alert():
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute("""select entity_id, target_name, priority_level, movement_distance_km 
                         from targets 
                         where (priority_level = 1 or priority_level = 2)
@@ -15,7 +15,7 @@ def get_quality_goal_shift_alert():
 
 #2
 def get_analysis_of_collection_sources():
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute("""select signal_type, count(signal_type) as count_type
                         from intel_signals
                         group by signal_type
@@ -26,7 +26,7 @@ def get_analysis_of_collection_sources():
 
 #3
 def get_finding_new_targets():
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute("""select entity_id, count(entity_id)as count_reports
                         from intel_signals
                         where priority_level = 99
@@ -39,7 +39,7 @@ def get_finding_new_targets():
 
 #4
 def get_identifying_awakened_sleeping_cells():
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute("""select day.entity_id from
                         (select entity_id from intel_signals where distance_from_last = 0 
                         and hour(timestamp) between 8 and 20 
@@ -55,7 +55,7 @@ def get_identifying_awakened_sleeping_cells():
 
 #5
 def get_visualization_of_a_target_trajectory(entity_id):
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
     cursor.execute("""select entity_id, reported_lat, reported_lon
                         from intel_signals
                         order by entity_id;""")
